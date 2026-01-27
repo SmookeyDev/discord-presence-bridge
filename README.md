@@ -1,58 +1,50 @@
-<div align="center">
-
-# Discord Presence Bridge
-
-Browser extension that bridges your web activity to Discord Rich Presence.
-
-[![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
-[![Bun](https://img.shields.io/badge/Bun-1.1.42+-black.svg)](https://bun.sh/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-blue.svg)](https://www.typescriptlang.org/)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#-installation)
-
-</div>
+<p align="center">
+  <h1 align="center">Discord Presence Bridge</h1>
+  <p align="center">Browser extension that bridges your web activity to Discord Rich Presence.</p>
+  <p align="center">
+    <img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License">
+    <img src="https://img.shields.io/badge/Bun-1.1.42+-black.svg" alt="Bun">
+    <img src="https://img.shields.io/badge/TypeScript-5.8+-blue.svg" alt="TypeScript">
+    <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg" alt="Platform">
+  </p>
+</p>
 
 ---
 
-## Table of Contents
+## 📝 Table of Contents
 
-- [About](#-about)
-- [Features](#-features)
-- [Requirements](#-requirements)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Development](#-development)
-- [Adding Providers](#-adding-providers)
-- [Support](#-support)
+- [🧐 About](#-about)
+- [⚡ Features](#-features)
+- [📋 Requirements](#-requirements)
+- [💻 Installation](#-installation)
+- [🚀 Usage](#-usage)
+- [🔧 Development](#-development)
+- [🎨 Adding Providers](#-adding-providers)
+- [💬 Support](#-support)
 
----
+## 🧐 About
 
-## About
-
-Discord Presence Bridge allows you to display your browser activity as Discord Rich Presence. It consists of two parts:
+**Discord Presence Bridge** allows you to display your browser activity as Discord Rich Presence. It consists of two parts:
 
 1. **Browser Extension** - Detects activity on supported websites
 2. **Desktop Server** - Bridges the extension to Discord's IPC
 
 The extension uses a provider system that makes it easy to add support for new websites.
 
----
+## ⚡ Features
 
-## Features
+| Feature | Status | Description |
+|---------|--------|-------------|
+| YouTube Presence | ✅ | Video title, channel, progress |
+| GeoGuessr Presence | ✅ | Game mode, round, score |
+| Live Stream Detection | ✅ | Detects live streams |
+| Play/Pause Status | ✅ | Shows current playback state |
+| Elapsed Time | ✅ | Tracks time spent |
+| Per-site Toggle | ✅ | Enable/disable per website |
+| Chrome & Firefox | ✅ | Both browsers supported |
+| Cross-platform | ✅ | Windows, macOS, Linux |
 
-| Feature | Status |
-|---------|--------|
-| YouTube presence (video title, channel, progress) | ✅ |
-| GeoGuessr presence (game mode, round, score) | ✅ |
-| Live stream detection | ✅ |
-| Play/Pause status | ✅ |
-| Elapsed time tracking | ✅ |
-| Per-site enable/disable | ✅ |
-| Chrome & Firefox support | ✅ |
-| Cross-platform server | ✅ |
-
----
-
-## Requirements
+## 📋 Requirements
 
 ### System Requirements
 
@@ -69,13 +61,12 @@ The extension uses a provider system that makes it easy to add support for new w
 - Browser extension installed
 - Desktop server running
 
----
-
-## Installation
+## 💻 Installation
 
 ### 1. Browser Extension
 
 #### Chrome / Chromium
+
 1. Download the latest release from [Releases](https://github.com/SmookeyDev/discord-presence-bridge/releases/latest)
 2. Extract `chrome-mv3.zip`
 3. Go to `chrome://extensions`
@@ -83,6 +74,7 @@ The extension uses a provider system that makes it easy to add support for new w
 5. Click "Load unpacked" and select the extracted folder
 
 #### Firefox
+
 1. Download the latest release from [Releases](https://github.com/SmookeyDev/discord-presence-bridge/releases/latest)
 2. Extract `firefox-mv2.zip`
 3. Go to `about:debugging#/runtime/this-firefox`
@@ -101,14 +93,16 @@ Download the appropriate executable for your platform from [Releases](https://gi
 
 > **Note:** Make sure Discord is running before starting the server.
 
----
+## 🚀 Usage
 
-## Usage
+### Quick Start
 
-1. Start Discord
-2. Run the desktop server (it will appear in your system tray)
-3. Open a supported website (YouTube, GeoGuessr, etc.)
-4. Your activity will appear on Discord!
+```
+1. Start Discord       →  Open the Discord desktop app
+2. Run Server          →  Start the desktop server (appears in system tray)
+3. Browse              →  Open a supported website (YouTube, GeoGuessr, etc.)
+4. Done                →  Your activity appears on Discord!
+```
 
 ### Extension Popup
 
@@ -126,9 +120,7 @@ Click the extension icon to:
 | `DEBUG` | false | Enable debug logging |
 | `NO_TRAY` | false | Disable system tray |
 
----
-
-## Development
+## 🔧 Development
 
 ### Prerequisites
 
@@ -176,9 +168,7 @@ discord-presence-bridge/
 | `bun run lint` | Run linter |
 | `bun run typecheck` | Type check all packages |
 
----
-
-## Adding Providers
+## 🎨 Adding Providers
 
 To add support for a new website, create a provider in `apps/extension/src/entrypoints/content-scripts/providers/`:
 
@@ -211,19 +201,22 @@ export class MyProvider extends BaseProvider {
 
 Then register it in `providers/index.ts` and create a content script entry point.
 
----
+## 💬 Support
 
-## Support
+For help and support:
 
-- [GitHub Issues](https://github.com/SmookeyDev/discord-presence-bridge/issues) - Bug reports and feature requests
-- [API Documentation](https://github.com/SmookeyDev/discord-presence-bridge/blob/master/docs/api.md) - For extension developers
+- 🐛 **Issues**: [Create an issue](https://github.com/SmookeyDev/discord-presence-bridge/issues)
+- 💡 **Feature Requests**: Submit via GitHub issues
+- 📖 **API Docs**: [API Documentation](https://github.com/SmookeyDev/discord-presence-bridge/blob/master/docs/api.md)
+
+## 📄 License
+
+This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <div align="center">
-
-Made with ❤️ by [SmookeyDev](https://github.com/SmookeyDev)
-
-Inspired by [Discord-RPC-Extension](https://github.com/lolamtisch/Discord-RPC-Extension)
-
+  <sub>Developed with ❤️ by SmookeyDev</sub>
+  <br>
+  <sub>Based on <a href="https://github.com/lolamtisch/Discord-RPC-Extension">Discord-RPC-Extension</a> by lolamtisch</sub>
 </div>
