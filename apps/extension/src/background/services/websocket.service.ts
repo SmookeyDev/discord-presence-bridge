@@ -19,8 +19,7 @@ export class WebSocketService {
 
 	isUpToDate(): boolean {
 		if (!this.serverVersion) return true;
-		// Consider up to date if version matches or is the expected version
-		return this.serverVersion === EXPECTED_VERSION || this.serverVersion === '0.3.0';
+		return this.serverVersion === EXPECTED_VERSION;
 	}
 
 	onMessage(handler: WebSocketMessageHandler): void {
