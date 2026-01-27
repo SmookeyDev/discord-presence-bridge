@@ -36,10 +36,30 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.*.local
 
+# IDE
 .vs/
 .vscode/
+.idea/
+
+# Build outputs
+dist/
+.output/
+.wxt/
+
+# Turborepo
+.turbo/
+
+# Bun
+bun.lockb
+bun.lock
+
+# Config
 config.json
 bwd/
 
-dist/
+# OS files
+.DS_Store
+Thumbs.db

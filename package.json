@@ -1,38 +1,39 @@
 {
-  "name": "discord-rpc",
-  "version": "0.3.0",
-  "description": "",
-  "dependencies": {
-    "@xhayper/discord-rpc": "^1.2.0",
-    "systray": "^1.0.5",
-    "ws": "^7.1.1"
-  },
-  "devDependencies": {
-    "archiver": "^3.1.1",
-    "create-nodew-exe": "^1.0.5",
-    "pkg": "^5.8.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:win && npm run build:linux && npm run build:macos && npm run build:pack",
-    "build:win": "npm run build:win:64",
-    "build:win:64": "pkg -c Server/pkg/win.json --out-path ./dist -t latest-win-x64 Server/win_tray_server.js && create-nodew-exe ./dist/server_win_64bit_debug.exe ./dist/server_win_64bit.exe",
-    "build:linux": "npm run build:linux:64 && npm run build:linux:32",
-    "build:linux:64": "pkg -c Server/pkg/linux.json --out-path ./dist -t latest-linux-x64 Server/linux_tray_server.js",
-    "build:linux:32": "pkg -o ./dist/server_linux_no_tray_debug -t latest-linux-x64 server.js",
-    "build:macos": "npm run build:macos:64 && npm run build:macos:32",
-    "build:macos:64": "pkg -c Server/pkg/mac.json --out-path ./dist -t latest-macos-x64 Server/linux_tray_server.js",
-    "build:macos:32": "pkg -o ./dist/server_macos_no_tray_debug -t latest-macos-x64 server.js",
-    "build:pack": "node Server/pkg/pack.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lolamtisch/discord-rpc.git"
-  },
-  "author": "",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/lolamtisch/discord-rpc/issues"
-  },
-  "homepage": "https://github.com/lolamtisch/discord-rpc#readme"
+	"name": "discord-presence-bridge",
+	"version": "0.4.0",
+	"private": true,
+	"type": "module",
+	"workspaces": ["apps/*", "packages/*"],
+	"scripts": {
+		"build": "turbo run build",
+		"build:server": "turbo run build --filter=@discord-rpc/server",
+		"build:extension": "turbo run build --filter=@discord-rpc/extension",
+		"dev": "turbo run dev",
+		"dev:server": "turbo run dev --filter=@discord-rpc/server",
+		"dev:extension": "turbo run dev --filter=@discord-rpc/extension",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"typecheck": "turbo run typecheck",
+		"test": "turbo run test",
+		"clean": "turbo run clean && rm -rf node_modules"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"turbo": "^2.3.0",
+		"typescript": "^5.8.2"
+	},
+	"packageManager": "bun@1.1.42",
+	"engines": {
+		"node": ">=20.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SmookeyDev/discord-presence-bridge.git"
+	},
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/SmookeyDev/discord-presence-bridge/issues"
+	},
+	"homepage": "https://github.com/SmookeyDev/discord-presence-bridge#readme"
 }
