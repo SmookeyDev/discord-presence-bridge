@@ -4,7 +4,7 @@ export * from './websocket.js';
 export * from './extension.js';
 
 // Export constants
-export const VERSION = '0.4.0';
+export const VERSION = '0.1.0';
 export const DEFAULT_PORT = 6969;
 export const DEFAULT_TIMEOUT_MS = 30_000;
 export const RECONNECT_INTERVAL_MS = 30_000;
