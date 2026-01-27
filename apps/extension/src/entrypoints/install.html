@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Discord Presence Bridge - Installed</title>
+		<meta charset="UTF-8" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		/>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+				margin: 0;
+				padding: 40px 20px;
+				display: flex;
+				justify-content: center;
+				align-items: flex-start;
+			}
+
+			.container {
+				background: white;
+				border-radius: 12px;
+				box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+				max-width: 600px;
+				width: 100%;
+				padding: 40px;
+			}
+
+			h1 {
+				color: #5865f2;
+				margin: 0 0 10px 0;
+				font-size: 28px;
+			}
+
+			.success-icon {
+				color: #43b581;
+				font-size: 48px;
+				margin-bottom: 20px;
+			}
+
+			p {
+				color: #4f545c;
+				line-height: 1.6;
+				margin: 0 0 20px 0;
+			}
+
+			.steps {
+				background: #f6f6f7;
+				border-radius: 8px;
+				padding: 20px;
+				margin: 20px 0;
+			}
+
+			.step {
+				display: flex;
+				align-items: flex-start;
+				margin-bottom: 15px;
+			}
+
+			.step:last-child {
+				margin-bottom: 0;
+			}
+
+			.step-number {
+				background: #5865f2;
+				color: white;
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				font-weight: bold;
+				margin-right: 12px;
+				flex-shrink: 0;
+			}
+
+			.step-content {
+				flex: 1;
+			}
+
+			.step-content strong {
+				color: #2e3338;
+			}
+
+			.button {
+				display: inline-block;
+				background: #5865f2;
+				color: white;
+				padding: 12px 24px;
+				border-radius: 6px;
+				text-decoration: none;
+				font-weight: 500;
+				transition: background 0.2s;
+			}
+
+			.button:hover {
+				background: #4752c4;
+			}
+
+			.note {
+				background: #fdf4e3;
+				border-left: 4px solid #faa61a;
+				padding: 12px 16px;
+				margin-top: 20px;
+				border-radius: 0 4px 4px 0;
+				font-size: 14px;
+				color: #8a6d3b;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<i class="material-icons success-icon">check_circle</i>
+			<h1>Extension Installed Successfully!</h1>
+			<p>
+				The Discord Presence Bridge extension is now installed. To complete the
+				setup, you need to download and run the desktop application.
+			</p>
+
+			<div class="steps">
+				<div class="step">
+					<div class="step-number">1</div>
+					<div class="step-content">
+						<strong>Download the desktop app</strong><br />
+						Get the latest version from the releases page.
+					</div>
+				</div>
+				<div class="step">
+					<div class="step-number">2</div>
+					<div class="step-content">
+						<strong>Run the application</strong><br />
+						Launch the downloaded app - it will run in your system tray.
+					</div>
+				</div>
+				<div class="step">
+					<div class="step-number">3</div>
+					<div class="step-content">
+						<strong>Start using presence extensions</strong><br />
+						Install extensions that support Discord Rich Presence to show your
+						activity.
+					</div>
+				</div>
+			</div>
+
+			<a
+				class="button"
+				href="https://github.com/SmookeyDev/discord-presence-bridge/releases/latest"
+				target="_blank"
+			>
+				Download Desktop App
+			</a>
+
+			<div class="note">
+				<strong>Note:</strong> Make sure Discord is running before starting the
+				desktop app.
+			</div>
+		</div>
+	</body>
+</html>

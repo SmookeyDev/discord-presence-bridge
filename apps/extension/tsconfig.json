@@ -1,0 +1,10 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"types": ["chrome"],
+		"noPropertyAccessFromIndexSignature": false
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "wxt.config.ts", ".wxt/types/**/*.d.ts"],
+	"exclude": ["node_modules", ".output"]
+}
