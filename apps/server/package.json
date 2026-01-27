@@ -1,0 +1,35 @@
+{
+	"name": "@discord-rpc/server",
+	"version": "0.4.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"bin": {
+		"discord-rpc-server": "./dist/index.js"
+	},
+	"scripts": {
+		"build": "bun build ./src/index.ts --outdir ./dist --target bun --minify",
+		"build:compile": "bun build ./src/index.ts --compile --outfile ./dist/discord-rpc-server",
+		"build:compile:linux": "bun build ./src/index.ts --compile --target=bun-linux-x64 --outfile ./dist/discord-rpc-server-linux-x64",
+		"build:compile:windows": "bun build ./src/index.ts --compile --target=bun-windows-x64 --outfile ./dist/discord-rpc-server-windows-x64.exe",
+		"build:compile:macos": "bun build ./src/index.ts --compile --target=bun-darwin-x64 --outfile ./dist/discord-rpc-server-macos-x64",
+		"build:compile:macos-arm": "bun build ./src/index.ts --compile --target=bun-darwin-arm64 --outfile ./dist/discord-rpc-server-macos-arm64",
+		"dev": "bun run --watch src/index.ts",
+		"start": "bun run src/index.ts",
+		"typecheck": "tsc --noEmit",
+		"test": "bun test",
+		"clean": "rm -rf dist"
+	},
+	"dependencies": {
+		"@discord-rpc/shared-types": "workspace:*",
+		"@sinclair/typebox": "^0.34.0",
+		"@xhayper/discord-rpc": "^1.2.0",
+		"systray2": "^2.1.4",
+		"ws": "^8.18.0"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/ws": "^8.5.13",
+		"typescript": "^5.8.2"
+	}
+}
