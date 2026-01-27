@@ -73,23 +73,20 @@ jobs:
         run: |
           bunx wxt zip
           bunx wxt zip -b firefox
+          ls -la .output/
 
-      - name: List output
-        working-directory: apps/extension
-        run: find . -name "*.zip" -o -name ".output" | head -20
-
-      - name: Rename extension zips
-        working-directory: apps/extension/.output
+      - name: Prepare extension artifacts
         run: |
-          mv *-chrome.zip chrome-mv3.zip 2>/dev/null || true
-          mv *-firefox.zip firefox-mv2.zip 2>/dev/null || true
-          ls -la *.zip
+          mkdir -p artifacts
+          cp apps/extension/.output/*-chrome.zip artifacts/chrome-mv3.zip
+          cp apps/extension/.output/*-firefox.zip artifacts/firefox-mv2.zip
+          ls -la artifacts/
 
       - name: Upload extension artifacts
         uses: actions/upload-artifact@v4
         with:
           name: extension-packages
-          path: apps/extension/.output/*.zip
+          path: artifacts/*.zip
 
   release:
     needs: [build-server, build-extension]
