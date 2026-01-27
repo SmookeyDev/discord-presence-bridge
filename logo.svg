@@ -31,11 +31,11 @@
        inkscape:collect="always"
        id="linearGradient3347">
       <stop
-         style="stop-color:#c82858;stop-opacity:0.7651515"
+         style="stop-color:#5865F2;stop-opacity:0.7651515"
          offset="0"
          id="stop3343" />
       <stop
-         style="stop-color:#c82858;stop-opacity:0;"
+         style="stop-color:#5865F2;stop-opacity:0;"
          offset="1"
          id="stop3345" />
     </linearGradient>
@@ -43,11 +43,11 @@
        inkscape:collect="always"
        id="linearGradient3341">
       <stop
-         style="stop-color:#c82858;stop-opacity:0.70454544"
+         style="stop-color:#5865F2;stop-opacity:0.70454544"
          offset="0"
          id="stop3337" />
       <stop
-         style="stop-color:#c82858;stop-opacity:0;"
+         style="stop-color:#5865F2;stop-opacity:0;"
          offset="1"
          id="stop3339" />
     </linearGradient>
@@ -57,11 +57,11 @@
       <stop
          id="stop16019"
          offset="0"
-         style="stop-color:#af2858;stop-opacity:1;" />
+         style="stop-color:#4752C4;stop-opacity:1;" />
       <stop
          id="stop16021"
          offset="1"
-         style="stop-color:#af2858;stop-opacity:0.112" />
+         style="stop-color:#4752C4;stop-opacity:0.112" />
     </linearGradient>
     <linearGradient
        id="linearGradient15945"
@@ -69,11 +69,11 @@
       <stop
          id="stop15941"
          offset="0"
-         style="stop-color:#af2858;stop-opacity:1;" />
+         style="stop-color:#4752C4;stop-opacity:1;" />
       <stop
          id="stop15943"
          offset="1"
-         style="stop-color:#af2858;stop-opacity:0;" />
+         style="stop-color:#4752C4;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient15031"
@@ -81,11 +81,11 @@
       <stop
          id="stop15027"
          offset="0"
-         style="stop-color:#5f2874;stop-opacity:1;" />
+         style="stop-color:#4752C4;stop-opacity:1;" />
       <stop
          id="stop15029"
          offset="1"
-         style="stop-color:#5f2874;stop-opacity:0;" />
+         style="stop-color:#4752C4;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient14823"
@@ -93,11 +93,11 @@
       <stop
          id="stop14819"
          offset="0"
-         style="stop-color:#63286e;stop-opacity:1;" />
+         style="stop-color:#4752C4;stop-opacity:1;" />
       <stop
          id="stop14821"
          offset="1"
-         style="stop-color:#63286e;stop-opacity:0;" />
+         style="stop-color:#4752C4;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient14815"
@@ -105,11 +105,11 @@
       <stop
          id="stop14811"
          offset="0"
-         style="stop-color:#a12874;stop-opacity:1;" />
+         style="stop-color:#5865F2;stop-opacity:1;" />
       <stop
          id="stop14813"
          offset="1"
-         style="stop-color:#a12874;stop-opacity:0;" />
+         style="stop-color:#5865F2;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient14807"
@@ -117,11 +117,11 @@
       <stop
          id="stop14803"
          offset="0"
-         style="stop-color:#af2874;stop-opacity:1;" />
+         style="stop-color:#4752C4;stop-opacity:1;" />
       <stop
          id="stop14805"
          offset="1"
-         style="stop-color:#af2874;stop-opacity:0;" />
+         style="stop-color:#4752C4;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient14693"
@@ -129,11 +129,11 @@
       <stop
          id="stop14689"
          offset="0"
-         style="stop-color:#8c2874;stop-opacity:1;" />
+         style="stop-color:#7289DA;stop-opacity:1;" />
       <stop
          id="stop14691"
          offset="1"
-         style="stop-color:#8c2874;stop-opacity:0;" />
+         style="stop-color:#7289DA;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient9800"
@@ -153,11 +153,11 @@
       <stop
          id="stop8188"
          offset="0"
-         style="stop-color:#c82858;stop-opacity:1;" />
+         style="stop-color:#5865F2;stop-opacity:1;" />
       <stop
          id="stop8190"
          offset="1"
-         style="stop-color:#c82858;stop-opacity:0;" />
+         style="stop-color:#5865F2;stop-opacity:0;" />
     </linearGradient>
     <linearGradient
        id="linearGradient5794"
@@ -165,11 +165,11 @@
       <stop
          id="stop5790"
          offset="0"
-         style="stop-color:#c82858;stop-opacity:1;" />
+         style="stop-color:#5865F2;stop-opacity:1;" />
       <stop
          id="stop5792"
          offset="1"
-         style="stop-color:#272858;stop-opacity:0" />
+         style="stop-color:#2b2d31;stop-opacity:0" />
     </linearGradient>
     <radialGradient
        gradientUnits="userSpaceOnUse"
@@ -841,7 +841,7 @@
          cy="12.652753"
          cx="10.063616"
          id="path4616"
-         style="opacity:0.82099998;fill:#c82858;fill-opacity:1;stroke:url(#radialGradient8682);stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter14681)" />
+         style="opacity:0.82099998;fill:#5865F2;fill-opacity:1;stroke:url(#radialGradient8682);stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter14681)" />
       <circle
          transform="matrix(1.1024597,-0.31242475,0.22822339,0.80533661,-5.1479644,7.5720458)"
          r="0.80319941"
@@ -861,7 +861,7 @@
          cy="19.928793"
          cx="5.1499252"
          id="path4622"
-         style="fill:#c82858;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11344)" />
+         style="fill:#5865F2;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11344)" />
       <ellipse
          transform="matrix(0.86254223,0.23288284,-0.40104921,1.4853902,4.0669242,-5.8703245)"
          ry="0.56696427"
@@ -876,41 +876,41 @@
          cy="4.6207585"
          cx="21.686384"
          id="path4626"
-         style="fill:#c82858;fill-opacity:1;stroke:url(#radialGradient9802);stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter9952)" />
+         style="fill:#5865F2;fill-opacity:1;stroke:url(#radialGradient9802);stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter9952)" />
       <path
          inkscape:connector-curvature="0"
          id="path4628"
          transform="matrix(0.26458333,0,0,0.26458333,-0.20045214,0.14198693)"
          d="M 81.464844,2.2890625 A 2.857143,2.6785715 0 0 0 79.642578,4.7851562 2.857143,2.6785715 0 0 0 82.5,7.4648438 2.857143,2.6785715 0 0 0 85.357422,4.7851562 2.857143,2.6785715 0 0 0 84.947266,3.40625 63.999997,63.999997 0 0 0 81.466797,2.2890625 a 2.857143,2.6785715 0 0 0 -0.002,0 z"
-         style="fill:#c82858;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;filter:url(#filter10072)" />
+         style="fill:#5865F2;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;filter:url(#filter10072)" />
       <ellipse
          ry="0.56696427"
          rx="0.47247022"
          cy="3.0616071"
          cx="14.882812"
          id="path4630"
-         style="fill:#c82858;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter10408)" />
+         style="fill:#5865F2;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter10408)" />
       <ellipse
          ry="0.66145831"
          rx="0.8504464"
          cy="9.7706842"
          cx="6.2366071"
          id="path4632"
-         style="fill:#c82858;fill-opacity:0.72348489;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11104)" />
+         style="fill:#5865F2;fill-opacity:0.72348489;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11104)" />
       <ellipse
          ry="0.8976934"
          rx="1.2284226"
          cy="16.574255"
          cx="4.3467264"
          id="path4634"
-         style="fill:#c82858;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11260)" />
+         style="fill:#5865F2;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11260)" />
       <ellipse
          ry="0.47247022"
          rx="0.70870537"
          cy="14.495386"
          cx="3.8742559"
          id="path4636"
-         style="fill:#c82858;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11160)" />
+         style="fill:#5865F2;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-opacity:1;filter:url(#filter11160)" />
       <ellipse
          ry="2.126116"
          rx="2.0316219"
@@ -969,7 +969,7 @@
          cy="17.412886"
          cx="29.750441"
          id="path2244"
-         style="opacity:0.69100001;fill:#af2858;fill-opacity:0.905303;stroke-width:0.26458332;filter:url(#filter2830)" />
+         style="opacity:0.69100001;fill:#4752C4;fill-opacity:0.905303;stroke-width:0.26458332;filter:url(#filter2830)" />
       <ellipse
          transform="rotate(-6.0320695,47.85022,26.406149)"
          ry="0.63476509"
@@ -977,7 +977,7 @@
          cy="17.412886"
          cx="29.750441"
          id="path2244-8"
-         style="opacity:0.41300001;fill:#af2858;fill-opacity:1;stroke-width:0.26458332;filter:url(#filter3207)" />
+         style="opacity:0.41300001;fill:#4752C4;fill-opacity:1;stroke-width:0.26458332;filter:url(#filter3207)" />
       <ellipse
          transform="rotate(-26.636828,18.976137,2.5042584)"
          ry="0.34243909"
@@ -985,7 +985,7 @@
          cy="2.5042584"
          cx="18.976137"
          id="path3211"
-         style="opacity:0.69100001;fill:#af2858;fill-opacity:1;stroke-width:0.26458332;filter:url(#filter3333)" />
+         style="opacity:0.69100001;fill:#4752C4;fill-opacity:1;stroke-width:0.26458332;filter:url(#filter3333)" />
     </g>
     <g
        id="g974"

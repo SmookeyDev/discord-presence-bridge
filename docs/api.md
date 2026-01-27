@@ -1,105 +1,204 @@
-# API
-The api has two parts. The registration and presence listener. They have to be registered inside the content script. Take a look at the example extensions [Here](/Examples).
+# External API
+
+Discord Presence Bridge exposes an API for other extensions to send presence data. This allows third-party extensions to integrate with Discord Rich Presence.
+
+> **Note:** For most use cases, consider creating a [built-in provider](../README.md#adding-providers) instead, which is simpler and doesn't require users to install multiple extensions.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Extension IDs](#extension-ids)
+- [Registration](#registration)
+- [Presence Listener](#presence-listener)
+- [Background Script](#background-script)
+- [Party Support](#party-support)
+- [Examples](#examples)
+
+---
+
+## Overview
+
+The API consists of two parts:
+
+1. **Registration** - Tell Discord Presence Bridge that your extension exists
+2. **Presence Listener** - Respond to presence requests with your data
+
+Both must be implemented in your content script.
+
+---
+
+## Extension IDs
+
+You need the Discord Presence Bridge extension ID to communicate with it:
+
+```javascript
+// Detect browser and set extension ID
+let extensionId = "agnaejlkbiiggajjmnpmeheigkflbnoo"; // Chrome
+
+if (typeof browser !== 'undefined' && typeof chrome !== 'undefined') {
+  extensionId = "{57081fef-67b4-482f-bcb0-69296e63ec4f}"; // Firefox
+}
+```
+
+---
 
 ## Registration
 
-```JS
-chrome.runtime.sendMessage(extensionId, {mode: 'active'}, function(response) {
-  console.log('Presence registred')
+Register your extension so Discord Presence Bridge knows it exists:
+
+```javascript
+chrome.runtime.sendMessage(extensionId, { mode: 'active' }, (response) => {
+  console.log('Presence registered');
 });
 ```
-The registration is only needed to be executed once for the extension to know that the presence exists. The presence is requested every 15 seconds, but if some change happens the presence can be forced to update through calling the registration again. If you wish for the timestamp to not be resetted every 15 seconds, consider storing `Date.now()` in a variable, and use that variable as the timestamp.
 
-The extensionId is the ID of the Discord-RPC extension. You will need to check what browser you are in, and change accordingly.
-```JS
-let extensionId = "agnaejlkbiiggajjmnpmeheigkflbnoo"; //Chrome
-if(typeof browser !== 'undefined' && typeof chrome !== "undefined"){
-  extensionId = "{57081fef-67b4-482f-bcb0-69296e63ec4f}"; //Firefox
-}
-```
-This needs to be above the registration code block.
+### Registration Modes
 
-### Modes
-There are 2 different presence types that can be registered. You have to pass it during the registration.
-#### active
-Use this mode if the presence is only important if the script is in the currently focused tab.
+| Mode | Description |
+|------|-------------|
+| `active` | Presence only shows when tab is focused |
+| `passive` | Presence shows even when tab is not focused (e.g., music player) |
 
-#### passive
-In this mode the presence is displayed even if the Tab is not focused (Example: music player). Active mode presences always have priority over the passive presences. If you need to handle the presence different when the tab is in focus or not. The presence listener passes if the tab is in focus.
+> **Note:** Active mode presences have priority over passive ones.
+
+### Forcing Updates
+
+Registration only needs to be called once, but you can call it again to force an immediate presence update (normally updates every 15 seconds).
+
+---
 
 ## Presence Listener
-```JS
-chrome.runtime.onMessage.addListener(function(info, sender, sendResponse) {
+
+Respond to presence requests from Discord Presence Bridge:
+
+```javascript
+chrome.runtime.onMessage.addListener((info, sender, sendResponse) => {
   console.log('Presence requested', info);
+
   sendResponse({
     clientId: '606504719212478504',
     presence: {
-      state: 'Testing',
-      details: '🍱',
-      startTimestamp: time,
-      instance: true,
+      details: 'Watching a video',
+      state: 'On My Service',
+      startTimestamp: Date.now(),
+      largeImageKey: 'logo',
+      largeImageText: 'My Service',
+      smallImageKey: 'play',
+      smallImageText: 'Playing',
     }
   });
 });
 ```
-#### clientId
-This is the Id of your discord Application. They can be created here: https://discordapp.com/developers/applications/
 
-#### presence
-Discord presence configuration more info here: https://discordapp.com/developers/docs/rich-presence/how-to#updating-presence-update-presence-payload-fields
+### Parameters
 
-The listener has always to return a presence, if it only misses one request it gets unregistered. If you want to keep your registration, but no presence should be displayed, then pass an empty object `{}`.
+| Field | Type | Description |
+|-------|------|-------------|
+| `clientId` | string | Your Discord Application ID ([create one here](https://discord.com/developers/applications)) |
+| `presence` | object | Discord presence object ([see fields](https://discord.com/developers/docs/rich-presence/how-to)) |
 
-## Background Page
-```JS
-chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
-  if(request.action == "presence") {
-    chrome.tabs.sendMessage(request.tab, request.info, function(response){
+### Presence Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `details` | string | First line of presence (max 128 chars) |
+| `state` | string | Second line of presence (max 128 chars) |
+| `startTimestamp` | number | Unix timestamp for "elapsed" time |
+| `endTimestamp` | number | Unix timestamp for "remaining" time |
+| `largeImageKey` | string | Large image asset name |
+| `largeImageText` | string | Large image tooltip |
+| `smallImageKey` | string | Small image asset name |
+| `smallImageText` | string | Small image tooltip |
+
+> **Important:** The listener must always return a response. To keep registration without showing presence, return an empty object `{}`.
+
+---
+
+## Background Script
+
+Add this to your background script to forward requests to content scripts:
+
+```javascript
+chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
+  if (request.action === 'presence') {
+    chrome.tabs.sendMessage(request.tab, request.info, (response) => {
       sendResponse(response);
     });
   }
   return true;
 });
 ```
-You need to have this in your background script. It is used to forward requests to the content script.
 
-## Party Support (Optional)
+---
 
-Makes it possible to create invitations in discord. People then can join that party if they have the extension installed and the browser open.
+## Party Support
 
-#### Registration
+Enable Discord party invitations for multiplayer features.
 
-The client has to be connected to discord for the join button to appear in discord. This is why you need to register your clientID on the background page.
+### Party Registration
 
-```JS
-chrome.runtime.sendMessage(extensionId, {action: 'party', clientId: '606504719212478504'}, function(response) {
-  console.log('Party registred', response);
+Register party support in your background script:
+
+```javascript
+chrome.runtime.sendMessage(extensionId, {
+  action: 'party',
+  clientId: '606504719212478504'
+}, (response) => {
+  console.log('Party registered', response);
 });
 ```
 
-Just add that for every clientId you want to support Parties for.
+### Party Presence
 
-#### Presence
-For the party to show up you need to extend your presence with atleast the partyID and joinSecret.
-The partyID is only for discord to be able to detect if the users are in the same party.
-When a user tries to join the joinSecret is passed from the host user. The joinSecret has to contain enought data to be able for the user to join. This is of type string. Because of security reasons I recommend to only pass the url path and just add the domain hardcoded afterwards.
+Add party fields to your presence:
 
-#### Join request
-If the user clicks on join the extension will sent out an request to your background page. There you can handle the secret in any way you need. Here I just open a new tab with it.
+```javascript
+{
+  clientId: '606504719212478504',
+  presence: {
+    details: 'In a party',
+    state: 'Playing together',
+    partyId: 'unique-party-id',
+    partySize: 2,
+    partyMax: 4,
+    joinSecret: '/room/abc123', // Used to join the party
+  }
+}
+```
 
-```JS
-chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
-  if(request.action == "join"){
-    //Opening a tab with domain + joinSecret
-    chrome.tabs.create({url: 'https://www.twitch.tv'+request.secret}, function (tab) {
+### Join Request Handler
+
+Handle when users click "Join" in Discord:
+
+```javascript
+chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
+  if (request.action === 'join') {
+    // Open tab with the join secret
+    chrome.tabs.create({
+      url: 'https://example.com' + request.secret
     });
   }
   return true;
 });
 ```
 
-#### Join Request (Even more optional)
-If an user clicks that he wants join you and you have not sent out a public invitation, then discord will have a small popup if you want to allow the user to join. It is possible to handle this yes/no modal directly in your own UI. Similar to the join request above you will recive a joinRequest on the background Page. You only need to responde with 'YES'/'NO' to the request for it to be passed to Discord. You can pass this request if needed to the content script. Check the code of the example extension for more info. Note that discord not allways dispatches this request to the extension because of spam protection.
+> **Security:** Only include the URL path in `joinSecret`, not the full URL. Add the domain in your handler.
+
+---
+
+## Examples
+
+Check the [examples folder](../examples/) for complete working implementations:
+
+- **ActiveTab** - Basic active tab presence
+- **PassiveTab** - Background music player style
+- **Background** - Background-only extension
+- **Party** - Multiplayer party support
+
+---
 
 ## Support
-If you still have problems. You can drop by on my discord server [Here](https://discordapp.com/invite/cTH4yaw)
+
+- [GitHub Issues](https://github.com/SmookeyDev/discord-presence-bridge/issues) - Bug reports and questions
