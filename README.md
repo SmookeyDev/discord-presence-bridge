@@ -7,6 +7,10 @@
     <img src="https://img.shields.io/badge/TypeScript-5.8+-blue.svg" alt="TypeScript">
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg" alt="Platform">
   </p>
+  <p align="center">
+    <a href="https://chromewebstore.google.com/detail/discord-presence-bridge/jacgdlkgmhpnmbkkiohjggieaelkdpjn"><img src="https://img.shields.io/chrome-web-store/v/jacgdlkgmhpnmbkkiohjggieaelkdpjn?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white" alt="Chrome Web Store"></a>
+    <a href="https://addons.mozilla.org/en-US/firefox/addon/discord-presence-bridge/"><img src="https://img.shields.io/amo/v/discord-presence-bridge?label=Firefox%20Add-ons&logo=firefoxbrowser&logoColor=white" alt="Firefox Add-ons"></a>
+  </p>
 </p>
 
 ---
@@ -67,19 +71,33 @@ The extension uses a provider system that makes it easy to add support for new w
 
 #### Chrome / Chromium
 
+**Recommended:** Install directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/discord-presence-bridge/jacgdlkgmhpnmbkkiohjggieaelkdpjn).
+
+<details>
+<summary>Manual installation</summary>
+
 1. Download the latest release from [Releases](https://github.com/SmookeyDev/discord-presence-bridge/releases/latest)
 2. Extract `chrome-mv3.zip`
 3. Go to `chrome://extensions`
 4. Enable "Developer mode"
 5. Click "Load unpacked" and select the extracted folder
 
+</details>
+
 #### Firefox
+
+**Recommended:** Install directly from [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/discord-presence-bridge/).
+
+<details>
+<summary>Manual installation</summary>
 
 1. Download the latest release from [Releases](https://github.com/SmookeyDev/discord-presence-bridge/releases/latest)
 2. Extract `firefox-mv2.zip`
 3. Go to `about:debugging#/runtime/this-firefox`
 4. Click "Load Temporary Add-on"
 5. Select the `manifest.json` file
+
+</details>
 
 ### 2. Desktop Server
 
@@ -218,5 +236,5 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) 
 <div align="center">
   <sub>Developed with ❤️ by SmookeyDev</sub>
   <br>
-  <sub>Based on <a href="https://github.com/lolamtisch/Discord-RPC-Extension">Discord-RPC-Extension</a> by lolamtisch</sub>
+  <sub>Based on <a href="https://github.com/lolamtisch/Discord-RPC-Extension">Discord-RPC-Extension</a> by <a href="https://github.com/lolamtisch">lolamtisch</a></sub>
 </div>
