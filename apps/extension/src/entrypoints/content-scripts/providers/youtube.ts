@@ -46,6 +46,12 @@ export class YouTubeProvider extends BaseProvider {
 
 		const title = this.getVideoTitle();
 		const channel = this.getChannelName();
+
+		// During SPA transitions the watch metadata hasn't rendered yet.
+		// Return null so the caller skips this update and keeps the last
+		// known presence instead of flashing placeholder text on Discord.
+		if (!title || !channel) return null;
+
 		const isLive = this.isLiveStream();
 		const state = this.getState();
 
@@ -122,18 +128,25 @@ export class YouTubeProvider extends BaseProvider {
 		return this.video;
 	}
 
-	private getVideoTitle(): string {
+	private getVideoTitle(): string | null {
 		const titleElement = document.querySelector(
 			'h1.ytd-video-primary-info-renderer yt-formatted-string, h1.ytd-watch-metadata yt-formatted-string',
 		) as HTMLElement | null;
-		return titleElement?.textContent?.trim() ?? 'Unknown Video';
+		const title = titleElement?.textContent?.trim();
+		if (title) return title;
+
+		// Fallback: document.title updates early during SPA navigation
+		// ("Video Title - YouTube"), and is always present once the page settled.
+		const docTitle = document.title.replace(/\s*-\s*YouTube\s*$/i, '').trim();
+		return docTitle.length > 0 ? docTitle : null;
 	}
 
-	private getChannelName(): string {
+	private getChannelName(): string | null {
 		const channelElement = document.querySelector(
 			'#channel-name yt-formatted-string a, ytd-channel-name yt-formatted-string a',
 		) as HTMLAnchorElement | null;
-		return channelElement?.textContent?.trim() ?? 'Unknown Channel';
+		const channel = channelElement?.textContent?.trim();
+		return channel && channel.length > 0 ? channel : null;
 	}
 
 	private isLiveStream(): boolean {
@@ -147,7 +160,11 @@ export class YouTubeProvider extends BaseProvider {
 		}
 
 		const presence = this.getPresence();
-		if (!presence) return;
+		if (!presence) {
+			// Metadata not ready yet (SPA transition) - keep the last good presence
+			console.log('[YouTube Provider] Metadata not ready, skipping update');
+			return;
+		}
 
 		const state = this.getState();
 		sendPresenceToBackground(this.config.clientId, presence, state.isPlaying ?? false);
