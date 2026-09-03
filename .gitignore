@@ -52,6 +52,9 @@ dist/
 # Turborepo
 .turbo/
 
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # Bun
 bun.lockb
 bun.lock

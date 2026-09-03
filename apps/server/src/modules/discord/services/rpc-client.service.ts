@@ -88,7 +88,7 @@ export class RpcClientService extends EventEmitter {
 				`RPC ready for client ${this.clientId} - Discord user: ${this.rpc.user?.username ?? 'unknown'}`,
 			);
 
-			// Subscribe to activity events
+			// Subscribe to activity events (async, errors are handled internally)
 			this.subscribeToEvents();
 
 			// Send cached activity if any
@@ -114,19 +114,19 @@ export class RpcClientService extends EventEmitter {
 		});
 	}
 
-	private subscribeToEvents(): void {
+	private async subscribeToEvents(): Promise<void> {
 		try {
-			this.rpc.subscribe('ACTIVITY_JOIN', (data: { secret: string }) => {
+			await this.rpc.subscribe('ACTIVITY_JOIN', (data: { secret: string }) => {
 				logger.debug('Activity join:', data.secret);
 				this.emit('join', data.secret);
 			});
 
-			this.rpc.subscribe('ACTIVITY_SPECTATE', (data: { secret: string }) => {
+			await this.rpc.subscribe('ACTIVITY_SPECTATE', (data: { secret: string }) => {
 				logger.debug('Activity spectate:', data.secret);
 				this.emit('spectate', data.secret);
 			});
 
-			this.rpc.subscribe('ACTIVITY_JOIN_REQUEST', (data: { user: unknown }) => {
+			await this.rpc.subscribe('ACTIVITY_JOIN_REQUEST', (data: { user: unknown }) => {
 				logger.debug('Activity join request:', data.user);
 				this.emit('joinRequest', data.user);
 			});

@@ -26,6 +26,12 @@ export class ClientManagerService {
 		this.websocket = ws;
 	}
 
+	clearWebSocket(ws: WebSocket): void {
+		if (this.websocket === ws) {
+			this.websocket = null;
+		}
+	}
+
 	connect(clientId: string, extId: string): RpcClientService | undefined {
 		const existing = this.clients.get(clientId);
 
@@ -35,6 +41,10 @@ export class ClientManagerService {
 
 		if (existing?.state === 'disconnected') {
 			logger.info(`Reconnecting client ${clientId}`);
+			// Destroy the old client to free its IPC connection before creating a new one
+			existing.client.destroy().catch((error: unknown) => {
+				logger.warn(`Failed to destroy old client ${clientId}:`, error);
+			});
 		} else {
 			// Enforce max clients limit to prevent memory leaks
 			this.enforceClientLimit();

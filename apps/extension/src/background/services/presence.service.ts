@@ -161,9 +161,9 @@ export class PresenceService {
 			this.requestPresence(tabInfo, info, removeTab, onDisconnect, passive);
 		};
 
-		if (!this.activeInterval) {
-			this.activeInterval = setInterval(poll, PRESENCE_INTERVAL);
-		}
+		// Always (re)start the interval so the new target is actually polled
+		this.clearInterval();
+		this.activeInterval = setInterval(poll, PRESENCE_INTERVAL);
 		poll();
 	}
 

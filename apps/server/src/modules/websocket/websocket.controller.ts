@@ -13,19 +13,40 @@ import { ClientManagerService } from '../discord/services/client-manager.service
 
 const logger = createLogger('WebSocket');
 
+/** Allowed origins for extension WebSocket connections (chrome-extension://<id>, moz-extension://<id>) */
+const EXTENSION_ORIGIN_REGEX = /^(chrome|moz)-extension:\/\//;
+
+function isAllowedOrigin(origin: string | undefined): boolean {
+	if (!origin) return false;
+	return EXTENSION_ORIGIN_REGEX.test(origin);
+}
+
 export class WebSocketController {
 	private readonly wss: WebSocketServer;
 	private readonly clientManager: ClientManagerService;
 
 	constructor() {
 		this.clientManager = new ClientManagerService();
-		this.wss = new WebSocketServer({ port: config.port });
+		this.wss = new WebSocketServer({
+			port: config.port,
+			// Guard against oversized payloads (memory exhaustion)
+			maxPayload: 1024 * 1024,
+		});
 		this.setupServer();
 	}
 
 	private setupServer(): void {
-		this.wss.on('connection', (ws) => {
-			logger.info('Client connected');
+		this.wss.on('connection', (ws, request) => {
+			const origin = request.headers.origin;
+			if (!isAllowedOrigin(origin)) {
+				logger.warn(
+					`Rejecting WebSocket connection from unauthorized origin: ${origin ?? '(none)'}`,
+				);
+				ws.close(1008, 'Unauthorized origin');
+				return;
+			}
+
+			logger.info(`Client connected (origin: ${origin})`);
 			this.handleConnection(ws);
 		});
 
@@ -42,12 +63,14 @@ export class WebSocketController {
 		// Send version on connect
 		ws.send(JSON.stringify({ version: VERSION }));
 
-		ws.on('message', (data) => {
-			this.handleMessage(ws, data);
+		// Drop any stale reference from a previous connection
+		ws.on('close', () => {
+			this.clientManager.clearWebSocket(ws);
+			logger.info('Client disconnected');
 		});
 
-		ws.on('close', () => {
-			logger.info('Client disconnected');
+		ws.on('message', (data) => {
+			this.handleMessage(ws, data);
 		});
 
 		ws.on('error', (error) => {
