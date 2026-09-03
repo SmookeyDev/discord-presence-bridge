@@ -36,37 +36,46 @@ export function handleExternalMessage(
 	if (typeof req.mode === 'string') {
 		console.log('[Handler] Register:', req, sender);
 
+		const extId = sender.id;
+		if (!extId) {
+			console.error('[Handler] Register rejected: missing sender id');
+			sendResponse({ status: false, error: 'Missing sender id' });
+			return false;
+		}
+
 		if (!sender.tab) {
 			// Background extension
 			const tabInfo: TabInfo = {
 				type: 'background',
-				domain: sender.id!,
-				extId: sender.id!,
-				tabId: sender.id!,
+				domain: extId,
+				extId,
+				tabId: extId,
 			};
-			tabManager.setBackgroundTab(sender.id!, tabInfo);
-		} else if (req.mode === 'passive') {
+			tabManager.setBackgroundTab(extId, tabInfo);
+		} else if (sender.tab.id !== undefined && sender.url) {
+			const tabId = sender.tab.id;
 			const tabInfo: TabInfo = {
-				type: 'passive',
-				domain: getDomain(sender.url!),
-				extId: sender.id!,
-				tabId: sender.tab.id!,
+				type: req.mode === 'passive' ? 'passive' : 'active',
+				domain: getDomain(sender.url),
+				extId,
+				tabId,
 			};
-			tabManager.setPassiveTab(sender.tab.id!, tabInfo);
+
+			if (req.mode === 'passive') {
+				tabManager.setPassiveTab(tabId, tabInfo);
+			} else {
+				tabManager.setActiveTab(tabId, tabInfo);
+			}
 		} else {
-			const tabInfo: TabInfo = {
-				type: 'active',
-				domain: getDomain(sender.url!),
-				extId: sender.id!,
-				tabId: sender.tab.id!,
-			};
-			tabManager.setActiveTab(sender.tab.id!, tabInfo);
+			console.error('[Handler] Register rejected: missing tab id or url');
+			sendResponse({ status: false, error: 'Missing tab id or url' });
+			return false;
 		}
 
 		sendResponse({ status: true });
 
-		if (sender.tab?.active) {
-			presenceService.checkActiveTab(sender.tab.id!);
+		if (sender.tab?.active && sender.tab.id !== undefined) {
+			presenceService.checkActiveTab(sender.tab.id);
 		}
 
 		return false;
@@ -77,10 +86,13 @@ export function handleExternalMessage(
 		switch (req.action) {
 			case 'party': {
 				console.log('[Handler] Party:', req);
-				const clientId = req.clientId as string;
-				partyListeners.set(clientId, {
-					clientId,
-					extId: sender.id!,
+				if (!sender.id || typeof req.clientId !== 'string') {
+					console.error('[Handler] Party rejected: missing clientId or sender id');
+					break;
+				}
+				partyListeners.set(req.clientId, {
+					clientId: req.clientId,
+					extId: sender.id,
 				});
 				updatePartyListeners();
 				break;

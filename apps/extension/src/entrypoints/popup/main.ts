@@ -35,6 +35,7 @@ interface ApiState {
 }
 
 let api: ApiState = { disabledDomains: [] };
+let elapsedInterval: ReturnType<typeof setInterval> | null = null;
 
 function escapeHtml(str: string): string {
 	const div = document.createElement('div');
@@ -237,10 +238,14 @@ function fillUi(): void {
 		// Update elapsed time every second
 		const elapsedEl = mainEl.querySelector('.elapsed-time');
 		const timeContainer = mainEl.querySelector('.presence-time');
+		if (elapsedInterval) {
+			clearInterval(elapsedInterval);
+			elapsedInterval = null;
+		}
 		if (elapsedEl && timeContainer) {
 			const startTimestamp = Number.parseInt(timeContainer.getAttribute('data-start') || '0', 10);
 			if (startTimestamp > 0) {
-				setInterval(() => {
+				elapsedInterval = setInterval(() => {
 					elapsedEl.textContent = formatElapsedTime(startTimestamp);
 				}, 1000);
 			}

@@ -18,6 +18,7 @@ export class YouTubeProvider extends BaseProvider {
 	private video: HTMLVideoElement | null = null;
 	private intervalId: ReturnType<typeof setInterval> | null = null;
 	private lastUrl = '';
+	private liveStartTime: number | null = null;
 
 	shouldActivate(): boolean {
 		return window.location.pathname.startsWith('/watch');
@@ -68,7 +69,11 @@ export class YouTubeProvider extends BaseProvider {
 			if (isLive) {
 				presence.smallImageKey = 'live';
 				presence.smallImageText = 'LIVE';
-				presence.startTimestamp = Date.now();
+				// Keep a stable start time so the "elapsed" counter doesn't reset on every update
+				if (!this.liveStartTime) {
+					this.liveStartTime = Date.now();
+				}
+				presence.startTimestamp = this.liveStartTime;
 			} else if (state.duration && state.duration > 0 && state.currentTime !== undefined) {
 				// Calculate when the video "started" based on current position
 				const videoStartTime = Date.now() - state.currentTime * 1000;
@@ -107,6 +112,11 @@ export class YouTubeProvider extends BaseProvider {
 
 	private getVideo(): HTMLVideoElement | null {
 		if (!this.video || !document.contains(this.video)) {
+			if (this.video) {
+				this.video.removeEventListener('play', this.onVideoEvent);
+				this.video.removeEventListener('pause', this.onVideoEvent);
+				this.video.removeEventListener('seeked', this.onVideoEvent);
+			}
 			this.video = document.querySelector('video');
 		}
 		return this.video;
@@ -147,9 +157,9 @@ export class YouTubeProvider extends BaseProvider {
 		const setup = () => {
 			const video = this.getVideo();
 			if (video) {
-				video.addEventListener('play', () => this.sendUpdate());
-				video.addEventListener('pause', () => this.sendUpdate());
-				video.addEventListener('seeked', () => this.sendUpdate());
+				video.addEventListener('play', this.onVideoEvent);
+				video.addEventListener('pause', this.onVideoEvent);
+				video.addEventListener('seeked', this.onVideoEvent);
 				console.log('[YouTube Provider] Video listeners attached');
 			} else {
 				setTimeout(setup, 1000);
@@ -157,6 +167,10 @@ export class YouTubeProvider extends BaseProvider {
 		};
 		setup();
 	}
+
+	private readonly onVideoEvent = (): void => {
+		this.sendUpdate();
+	};
 
 	private watchNavigation(): void {
 		this.lastUrl = location.href;
@@ -166,8 +180,9 @@ export class YouTubeProvider extends BaseProvider {
 				this.lastUrl = location.href;
 				console.log('[YouTube Provider] Navigation detected');
 
-				// Reset video reference
+				// Reset video reference and live start time
 				this.video = null;
+				this.liveStartTime = null;
 
 				setTimeout(() => {
 					this.setupVideoListeners();

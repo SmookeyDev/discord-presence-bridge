@@ -6,7 +6,7 @@ export default defineConfig({
 	manifest: {
 		name: 'Discord Presence Bridge',
 		description: 'Discord rich presence extension with open API.',
-		version: '0.4.0',
+		version: '0.1.1',
 		permissions: ['tabs', 'storage'],
 		// Firefox-specific settings - ID fixo para desenvolvimento e produção
 		browser_specific_settings: {
