@@ -48,9 +48,11 @@ export class YouTubeProvider extends BaseProvider {
 		const channel = this.getChannelName();
 
 		// During SPA transitions the watch metadata hasn't rendered yet.
-		// Return null so the caller skips this update and keeps the last
-		// known presence instead of flashing placeholder text on Discord.
-		if (!title || !channel) return null;
+		// Without a title there is nothing meaningful to display, so skip the
+		// update and keep the last known presence instead of flashing
+		// placeholder text on Discord. The channel alone is not blocking:
+		// co-streams render the owner name in elements our selector may miss.
+		if (!title) return null;
 
 		const isLive = this.isLiveStream();
 		const state = this.getState();
@@ -62,9 +64,11 @@ export class YouTubeProvider extends BaseProvider {
 		};
 
 		// Build state with channel and time info
-		let stateText = channel;
+		let stateText = channel ?? 'YouTube';
 		if (!isLive && state.duration && state.duration > 0) {
-			stateText = `${channel} • ${formatDuration(state.currentTime || 0)} / ${formatDuration(state.duration)}`;
+			stateText = channel
+				? `${channel} • ${formatDuration(state.currentTime || 0)} / ${formatDuration(state.duration)}`
+				: `${formatDuration(state.currentTime || 0)} / ${formatDuration(state.duration)}`;
 		}
 		presence.state = stateText.slice(0, 128);
 
@@ -142,11 +146,19 @@ export class YouTubeProvider extends BaseProvider {
 	}
 
 	private getChannelName(): string | null {
-		const channelElement = document.querySelector(
-			'#channel-name yt-formatted-string a, ytd-channel-name yt-formatted-string a',
-		) as HTMLAnchorElement | null;
-		const channel = channelElement?.textContent?.trim();
-		return channel && channel.length > 0 ? channel : null;
+		const selectors = [
+			'#channel-name yt-formatted-string a',
+			'ytd-channel-name yt-formatted-string a',
+			'ytd-video-owner-renderer a.yt-formatted-string',
+			'ytd-video-owner-renderer yt-formatted-string a',
+			'#owner #channel-name a',
+		];
+		for (const selector of selectors) {
+			const el = document.querySelector(selector) as HTMLElement | null;
+			const name = el?.textContent?.trim();
+			if (name && name.length > 0) return name;
+		}
+		return null;
 	}
 
 	private isLiveStream(): boolean {
