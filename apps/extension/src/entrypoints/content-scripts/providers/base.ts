@@ -13,6 +13,8 @@ export interface PresenceData {
 	startTimestamp?: number;
 	endTimestamp?: number;
 	buttons?: Array<{ label: string; url: string }>;
+	/** Discord activity type (0 = Playing, 2 = Listening, 3 = Watching, 5 = Competing) */
+	type?: number;
 }
 
 export interface ProviderConfig {

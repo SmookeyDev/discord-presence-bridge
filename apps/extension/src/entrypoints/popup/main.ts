@@ -59,6 +59,7 @@ function getServiceIcon(domain: string): string {
 	const serviceIcons: Record<string, string> = {
 		'youtube.com': icons.youtube,
 		'geoguessr.com': icons.globe,
+		'tidal.com': icons.music,
 		'twitch.tv': icons.tv,
 		'spotify.com': icons.music,
 		'netflix.com': icons.film,
@@ -86,6 +87,7 @@ function getServiceName(domain: string, presenceDetails?: string): string {
 	const services: Record<string, string> = {
 		'youtube.com': 'YouTube',
 		'geoguessr.com': 'GeoGuessr',
+		'tidal.com': 'TIDAL',
 		'twitch.tv': 'Twitch',
 		'spotify.com': 'Spotify',
 		'netflix.com': 'Netflix',

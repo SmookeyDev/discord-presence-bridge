@@ -10,6 +10,7 @@ export type { PresenceData, ProviderConfig, ProviderState } from './base.js';
 
 export { YouTubeProvider, youtubeProvider } from './youtube.js';
 export { GeoGuessrProvider, geoguessrProvider } from './geoguessr.js';
+export { TidalProvider, tidalProvider } from './tidal.js';
 
 // Future providers:
 // export { TwitchProvider, twitchProvider } from './twitch.js';
