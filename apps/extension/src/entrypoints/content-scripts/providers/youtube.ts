@@ -18,6 +18,7 @@ export class YouTubeProvider extends BaseProvider {
 	private video: HTMLVideoElement | null = null;
 	private intervalId: ReturnType<typeof setInterval> | null = null;
 	private lastUrl = '';
+	private liveStartTime: number | null = null;
 
 	shouldActivate(): boolean {
 		return window.location.pathname.startsWith('/watch');
@@ -45,6 +46,14 @@ export class YouTubeProvider extends BaseProvider {
 
 		const title = this.getVideoTitle();
 		const channel = this.getChannelName();
+
+		// During SPA transitions the watch metadata hasn't rendered yet.
+		// Without a title there is nothing meaningful to display, so skip the
+		// update and keep the last known presence instead of flashing
+		// placeholder text on Discord. The channel alone is not blocking:
+		// co-streams render the owner name in elements our selector may miss.
+		if (!title) return null;
+
 		const isLive = this.isLiveStream();
 		const state = this.getState();
 
@@ -55,9 +64,11 @@ export class YouTubeProvider extends BaseProvider {
 		};
 
 		// Build state with channel and time info
-		let stateText = channel;
+		let stateText = channel ?? 'YouTube';
 		if (!isLive && state.duration && state.duration > 0) {
-			stateText = `${channel} • ${formatDuration(state.currentTime || 0)} / ${formatDuration(state.duration)}`;
+			stateText = channel
+				? `${channel} • ${formatDuration(state.currentTime || 0)} / ${formatDuration(state.duration)}`
+				: `${formatDuration(state.currentTime || 0)} / ${formatDuration(state.duration)}`;
 		}
 		presence.state = stateText.slice(0, 128);
 
@@ -68,7 +79,11 @@ export class YouTubeProvider extends BaseProvider {
 			if (isLive) {
 				presence.smallImageKey = 'live';
 				presence.smallImageText = 'LIVE';
-				presence.startTimestamp = Date.now();
+				// Keep a stable start time so the "elapsed" counter doesn't reset on every update
+				if (!this.liveStartTime) {
+					this.liveStartTime = Date.now();
+				}
+				presence.startTimestamp = this.liveStartTime;
 			} else if (state.duration && state.duration > 0 && state.currentTime !== undefined) {
 				// Calculate when the video "started" based on current position
 				const videoStartTime = Date.now() - state.currentTime * 1000;
@@ -107,23 +122,43 @@ export class YouTubeProvider extends BaseProvider {
 
 	private getVideo(): HTMLVideoElement | null {
 		if (!this.video || !document.contains(this.video)) {
+			if (this.video) {
+				this.video.removeEventListener('play', this.onVideoEvent);
+				this.video.removeEventListener('pause', this.onVideoEvent);
+				this.video.removeEventListener('seeked', this.onVideoEvent);
+			}
 			this.video = document.querySelector('video');
 		}
 		return this.video;
 	}
 
-	private getVideoTitle(): string {
+	private getVideoTitle(): string | null {
 		const titleElement = document.querySelector(
 			'h1.ytd-video-primary-info-renderer yt-formatted-string, h1.ytd-watch-metadata yt-formatted-string',
 		) as HTMLElement | null;
-		return titleElement?.textContent?.trim() ?? 'Unknown Video';
+		const title = titleElement?.textContent?.trim();
+		if (title) return title;
+
+		// Fallback: document.title updates early during SPA navigation
+		// ("Video Title - YouTube"), and is always present once the page settled.
+		const docTitle = document.title.replace(/\s*-\s*YouTube\s*$/i, '').trim();
+		return docTitle.length > 0 ? docTitle : null;
 	}
 
-	private getChannelName(): string {
-		const channelElement = document.querySelector(
-			'#channel-name yt-formatted-string a, ytd-channel-name yt-formatted-string a',
-		) as HTMLAnchorElement | null;
-		return channelElement?.textContent?.trim() ?? 'Unknown Channel';
+	private getChannelName(): string | null {
+		const selectors = [
+			'#channel-name yt-formatted-string a',
+			'ytd-channel-name yt-formatted-string a',
+			'ytd-video-owner-renderer a.yt-formatted-string',
+			'ytd-video-owner-renderer yt-formatted-string a',
+			'#owner #channel-name a',
+		];
+		for (const selector of selectors) {
+			const el = document.querySelector(selector) as HTMLElement | null;
+			const name = el?.textContent?.trim();
+			if (name && name.length > 0) return name;
+		}
+		return null;
 	}
 
 	private isLiveStream(): boolean {
@@ -137,7 +172,11 @@ export class YouTubeProvider extends BaseProvider {
 		}
 
 		const presence = this.getPresence();
-		if (!presence) return;
+		if (!presence) {
+			// Metadata not ready yet (SPA transition) - keep the last good presence
+			console.log('[YouTube Provider] Metadata not ready, skipping update');
+			return;
+		}
 
 		const state = this.getState();
 		sendPresenceToBackground(this.config.clientId, presence, state.isPlaying ?? false);
@@ -147,9 +186,9 @@ export class YouTubeProvider extends BaseProvider {
 		const setup = () => {
 			const video = this.getVideo();
 			if (video) {
-				video.addEventListener('play', () => this.sendUpdate());
-				video.addEventListener('pause', () => this.sendUpdate());
-				video.addEventListener('seeked', () => this.sendUpdate());
+				video.addEventListener('play', this.onVideoEvent);
+				video.addEventListener('pause', this.onVideoEvent);
+				video.addEventListener('seeked', this.onVideoEvent);
 				console.log('[YouTube Provider] Video listeners attached');
 			} else {
 				setTimeout(setup, 1000);
@@ -157,6 +196,10 @@ export class YouTubeProvider extends BaseProvider {
 		};
 		setup();
 	}
+
+	private readonly onVideoEvent = (): void => {
+		this.sendUpdate();
+	};
 
 	private watchNavigation(): void {
 		this.lastUrl = location.href;
@@ -166,8 +209,9 @@ export class YouTubeProvider extends BaseProvider {
 				this.lastUrl = location.href;
 				console.log('[YouTube Provider] Navigation detected');
 
-				// Reset video reference
+				// Reset video reference and live start time
 				this.video = null;
+				this.liveStartTime = null;
 
 				setTimeout(() => {
 					this.setupVideoListeners();

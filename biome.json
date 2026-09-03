@@ -38,6 +38,6 @@
 		}
 	},
 	"files": {
-		"ignore": ["node_modules", "dist", ".output", ".turbo", "examples", "*.min.js"]
+		"ignore": ["node_modules", "dist", ".output", ".turbo", ".wxt", "examples", "*.min.js"]
 	}
 }

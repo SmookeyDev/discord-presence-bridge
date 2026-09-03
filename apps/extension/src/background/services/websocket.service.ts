@@ -8,6 +8,7 @@ export class WebSocketService {
 	private serverVersion: string | null = null;
 	private messageHandler: WebSocketMessageHandler | null = null;
 	private statusHandler: WebSocketStatusHandler | null = null;
+	private connecting: Promise<void> | null = null;
 
 	isConnected(): boolean {
 		return this.socket?.readyState === WebSocket.OPEN;
@@ -30,27 +31,42 @@ export class WebSocketService {
 		this.statusHandler = handler;
 	}
 
-	async connect(): Promise<void> {
+	connect(): Promise<void> {
 		if (this.isConnected()) {
-			return;
+			return Promise.resolve();
 		}
 
-		return new Promise((resolve, reject) => {
-			this.socket = new WebSocket(WEBSOCKET_URL);
+		// Prevent concurrent connections from racing each other
+		if (this.connecting) {
+			return this.connecting;
+		}
 
-			this.socket.onerror = (evt) => {
+		this.connecting = new Promise((resolve, reject) => {
+			const socket = new WebSocket(WEBSOCKET_URL);
+			this.socket = socket;
+
+			socket.onerror = (evt) => {
 				console.error('[WebSocket] Connection error:', evt);
-				this.statusHandler?.(false);
-				reject(new Error('Could not connect to Server'));
+				// Only report status/failure if this is still the current connection attempt
+				if (this.socket === socket) {
+					this.statusHandler?.(false);
+					this.socket = null;
+					this.connecting = null;
+					reject(new Error('Could not connect to Server'));
+				}
 			};
 
-			this.socket.onopen = () => {
-				console.log('[WebSocket] Connected');
-				this.statusHandler?.(true);
-				resolve();
+			socket.onopen = () => {
+				if (this.socket === socket) {
+					console.log('[WebSocket] Connected');
+					this.statusHandler?.(true);
+					this.connecting = null;
+					resolve();
+				}
 			};
 
-			this.socket.onmessage = (evt) => {
+			socket.onmessage = (evt) => {
+				if (this.socket !== socket) return;
 				try {
 					const data = JSON.parse(evt.data);
 
@@ -66,11 +82,16 @@ export class WebSocketService {
 				}
 			};
 
-			this.socket.onclose = () => {
+			socket.onclose = () => {
 				console.log('[WebSocket] Disconnected');
-				this.statusHandler?.(false);
+				if (this.socket === socket) {
+					this.socket = null;
+					this.statusHandler?.(false);
+				}
 			};
 		});
+
+		return this.connecting;
 	}
 
 	send(data: unknown): void {

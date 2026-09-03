@@ -1,11 +1,12 @@
 import {
 	DEFAULT_PORT,
+	EXPECTED_VERSION,
 	FOCUS_TIMEOUT_MS,
 	PRESENCE_UPDATE_INTERVAL_MS,
 } from '@discord-rpc/shared-types';
 
 export const WEBSOCKET_URL = `ws://localhost:${DEFAULT_PORT}`;
-export const EXPECTED_VERSION = '0.1.0';
+export { EXPECTED_VERSION };
 export const PRESENCE_INTERVAL = PRESENCE_UPDATE_INTERVAL_MS;
 export const FOCUS_TIMEOUT = FOCUS_TIMEOUT_MS;
 export const TAB_PERSIST_DEBOUNCE_MS = 1000;

@@ -35,6 +35,7 @@ interface ApiState {
 }
 
 let api: ApiState = { disabledDomains: [] };
+let elapsedInterval: ReturnType<typeof setInterval> | null = null;
 
 function escapeHtml(str: string): string {
 	const div = document.createElement('div');
@@ -58,8 +59,10 @@ function getServiceIcon(domain: string): string {
 	const serviceIcons: Record<string, string> = {
 		'youtube.com': icons.youtube,
 		'geoguessr.com': icons.globe,
+		'tidal.com': icons.music,
+		'open.spotify.com': icons.music,
+		'play.qobuz.com': icons.headphones,
 		'twitch.tv': icons.tv,
-		'spotify.com': icons.music,
 		'netflix.com': icons.film,
 		'soundcloud.com': icons.headphones,
 	};
@@ -85,8 +88,10 @@ function getServiceName(domain: string, presenceDetails?: string): string {
 	const services: Record<string, string> = {
 		'youtube.com': 'YouTube',
 		'geoguessr.com': 'GeoGuessr',
+		'tidal.com': 'TIDAL',
+		'open.spotify.com': 'Spotify',
+		'play.qobuz.com': 'Qobuz',
 		'twitch.tv': 'Twitch',
-		'spotify.com': 'Spotify',
 		'netflix.com': 'Netflix',
 		'soundcloud.com': 'SoundCloud',
 	};
@@ -237,10 +242,14 @@ function fillUi(): void {
 		// Update elapsed time every second
 		const elapsedEl = mainEl.querySelector('.elapsed-time');
 		const timeContainer = mainEl.querySelector('.presence-time');
+		if (elapsedInterval) {
+			clearInterval(elapsedInterval);
+			elapsedInterval = null;
+		}
 		if (elapsedEl && timeContainer) {
 			const startTimestamp = Number.parseInt(timeContainer.getAttribute('data-start') || '0', 10);
 			if (startTimestamp > 0) {
-				setInterval(() => {
+				elapsedInterval = setInterval(() => {
 					elapsedEl.textContent = formatElapsedTime(startTimestamp);
 				}, 1000);
 			}
