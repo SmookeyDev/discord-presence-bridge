@@ -60,8 +60,9 @@ function getServiceIcon(domain: string): string {
 		'youtube.com': icons.youtube,
 		'geoguessr.com': icons.globe,
 		'tidal.com': icons.music,
+		'open.spotify.com': icons.music,
+		'play.qobuz.com': icons.headphones,
 		'twitch.tv': icons.tv,
-		'spotify.com': icons.music,
 		'netflix.com': icons.film,
 		'soundcloud.com': icons.headphones,
 	};
@@ -88,8 +89,9 @@ function getServiceName(domain: string, presenceDetails?: string): string {
 		'youtube.com': 'YouTube',
 		'geoguessr.com': 'GeoGuessr',
 		'tidal.com': 'TIDAL',
+		'open.spotify.com': 'Spotify',
+		'play.qobuz.com': 'Qobuz',
 		'twitch.tv': 'Twitch',
-		'spotify.com': 'Spotify',
 		'netflix.com': 'Netflix',
 		'soundcloud.com': 'SoundCloud',
 	};
