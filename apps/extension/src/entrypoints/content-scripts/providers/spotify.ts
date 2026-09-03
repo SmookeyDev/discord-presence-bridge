@@ -3,7 +3,6 @@ import {
 	type PresenceData,
 	type ProviderConfig,
 	type ProviderState,
-	clearPresence,
 	sendPresenceToBackground,
 } from './base.js';
 
@@ -43,9 +42,12 @@ export class SpotifyProvider extends BaseProvider {
 			return { isActive: false };
 		}
 
-		// While playing, the button's aria-label contains "pause"/"pausar"
+		// The play/pause icon is language-independent; the aria-label is not
+		// (e.g. pt-BR "Pausar" does not contain "pause", breaking the includes() heuristic)
+		const hasPauseIcon = !!playPauseButton.querySelector('svg[data-encore-id="icon-pause"]');
 		const isPlaying =
-			playPauseButton.getAttribute('aria-label')?.toLowerCase().includes('pause') ?? false;
+			hasPauseIcon ||
+			(playPauseButton.getAttribute('aria-label')?.toLowerCase().startsWith('pause') ?? false);
 
 		const currentTime = parseTime(
 			document.querySelector<HTMLElement>('[data-testid="playback-position"]')?.textContent,
@@ -136,8 +138,11 @@ export class SpotifyProvider extends BaseProvider {
 
 		const presence = this.getPresence();
 		if (!presence) {
-			// Not playing or metadata not ready - clear so Discord drops the activity
-			clearPresence();
+			// Not playing or metadata not ready - skip this cycle; the server's
+			// presence timeout clears the stale activity on its own. Sending
+			// presence-clear here would also kill an active presence from
+			// another tab (e.g. TIDAL playing while Spotify is paused).
+			console.log('[Spotify Provider] Not playing, skipping update');
 			return;
 		}
 
